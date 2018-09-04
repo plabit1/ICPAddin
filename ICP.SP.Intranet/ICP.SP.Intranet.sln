@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICP.SP.Intranet", "ICP.SP.I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICP.SP.IntranetWeb", "ICP.SP.IntranetWeb\ICP.SP.IntranetWeb.csproj", "{83AF9475-D7C7-4755-BC83-04CFFBBD33E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICP.SP.Intranet.SyncPerms", "ICP.SP.Intranet.SyncPerms\ICP.SP.Intranet.SyncPerms.csproj", "{22AF054D-85B4-4736-866C-F016DFD4EF10}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICP.SP.Intranet.DataAccess", "ICP.SP.Intranet.DataAccess\ICP.SP.Intranet.DataAccess.csproj", "{F9C7DC13-D4AE-4D99-8397-D0F2587D84BD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ICP.SP.Intranet.Models", "ICP.SP.Intranet.Models\ICP.SP.Intranet.Models.csproj", "{C353D23B-26A3-45AE-B8CF-7A96D9016158}"
@@ -33,10 +31,6 @@ Global
 		{83AF9475-D7C7-4755-BC83-04CFFBBD33E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83AF9475-D7C7-4755-BC83-04CFFBBD33E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83AF9475-D7C7-4755-BC83-04CFFBBD33E3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{22AF054D-85B4-4736-866C-F016DFD4EF10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{22AF054D-85B4-4736-866C-F016DFD4EF10}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{22AF054D-85B4-4736-866C-F016DFD4EF10}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{22AF054D-85B4-4736-866C-F016DFD4EF10}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F9C7DC13-D4AE-4D99-8397-D0F2587D84BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F9C7DC13-D4AE-4D99-8397-D0F2587D84BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9C7DC13-D4AE-4D99-8397-D0F2587D84BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
