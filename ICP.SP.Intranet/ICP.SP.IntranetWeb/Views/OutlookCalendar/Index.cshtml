@@ -1,0 +1,217 @@
+﻿@model ICP.SP.IntranetWeb.ViewModels.EventsViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript">
+        // Set the style of the client web part page to be consistent with the host web.
+        (function () {
+            'use strict';
+
+            var hostUrl = '';
+            var link = document.createElement('link');
+            link.setAttribute('rel', 'stylesheet');
+            if (document.URL.indexOf('?') != -1) {
+                var params = document.URL.split('?')[1].split('&');
+                for (var i = 0; i < params.length; i++) {
+                    var p = decodeURIComponent(params[i]);
+                    if (/^SPHostUrl=/i.test(p)) {
+                        hostUrl = p.split('=')[1];
+                        link.setAttribute('href', hostUrl + '/_layouts/15/defaultcss.ashx');
+                        break;
+                    }
+                }
+            }
+            if (hostUrl == '') {
+                link.setAttribute('href', '/_layouts/15/1033/styles/themable/corev15.css');
+            }
+            document.head.appendChild(link);
+        })();
+    </script>
+    <style>
+        .table {
+            width: 100%;
+            max-width: 100%;
+            background: #fff;
+            font-size: 12px;
+            color: #a6aeb7;
+            font-family: "Helvetiva",sans-serif;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+            .table > thead > tr > th,
+            .table > tbody > tr > th,
+            .table > tfoot > tr > th,
+            .table > thead > tr > td,
+            .table > tbody > tr > td,
+            .table > tfoot > tr > td {
+                padding: 6px 8px 6px 8px;
+                line-height: 1.4;
+                vertical-align: top;
+            }
+
+        .table-calendar {
+            width: 100%;
+        }
+
+            .table-calendar thead th {
+                background: #e1f2fa;
+                color: #917367;
+                text-align: left;
+            }
+
+                .table-calendar thead th.selected {
+                    background: #98c7e8;
+                    color: #ffffff;
+                }
+
+            .table-calendar tbody tr td {
+                text-align: left;
+                width: 14.28571%;
+            }
+
+                .table-calendar tbody tr td.current-day {
+                    background: #0072c6;
+                }
+
+                    .table-calendar tbody tr td.current-day .day {
+                        color: #ffffff;
+                    }
+
+                .table-calendar tbody tr td .day {
+                    font-size: 16px;
+                    color: #787c82;
+                }
+
+                    .table-calendar tbody tr td .day.first-day {
+                        font-weight: bold;
+                        color: #000000;
+                    }
+
+                    .table-calendar tbody tr td .day.past-day {
+                        color: #cccccc;
+                    }
+
+                .table-calendar tbody tr td .list-meetings {
+                    margin: 0 0 0 -6px;
+                    padding: 0;
+                    list-style: none;
+                    color: #65515a;
+                    max-height: 260px;
+                    min-height: 130px;
+                    overflow-y: auto;
+                    overflow-x: hidden;
+                }
+
+                    .table-calendar tbody tr td .list-meetings li {
+                        background: #d0e8f8;
+                        border-left: 5px solid #99c8e9;
+                        padding: 0 2px;
+                        font-size: 10px;
+                        margin-bottom: 1px;
+                    }
+
+                        .table-calendar tbody tr td .list-meetings li .left {
+                            margin-right: 3px;
+                        }
+
+                        .table-calendar tbody tr td .list-meetings li.past-meeting {
+                            border: none;
+                            padding-left: 7px;
+                            background: #e6f2fb url(img/border.jpg) repeat-y;
+                            color: #aeadbe;
+                        }
+
+                        .table-calendar tbody tr td .list-meetings li.paused-meeting {
+                            border-color: #a71d23;
+                            background: #d98889;
+                        }
+
+                        .table-calendar tbody tr td .list-meetings li.highlighted-meeting {
+                            border-color: #a0981d;
+                            background: #f8f264;
+                        }
+
+            .table-calendar.table-bordered > tbody > tr > td, .table-calendar.table-bordered > tbody > tr > th, .table-calendar.table-bordered > tfoot > tr > td, .table-calendar.table-bordered > tfoot > tr > th, .table-calendar.table-bordered > thead > tr > td, .table-calendar.table-bordered > thead > tr > th {
+                border: 1px solid #ddd;
+            }
+
+        /*# sourceMappingURL=calendario.css.map */
+    </style>
+</head>
+<body>
+    <div id="divContainer">
+        <div id="wrapper-calendar">
+            <div id="inner-calendar">
+                <table class="table table-calendar table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="selected" " data-day-selected="1">@DateTime.Today.ToString("dddd", Model.CurrentCulture).ToUpper()</th>
+                            <th class="" data-day-selected="2">@DateTime.Today.AddDays(1).ToString("dddd", Model.CurrentCulture).ToUpper()</th>
+                            <th class="" data-day-selected="3">@DateTime.Today.AddDays(2).ToString("dddd", Model.CurrentCulture).ToUpper()</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="calendar">
+                            <td class="field field-calendar current-day">
+                                <div>
+                                    <span class="day">@DateTime.Today.ToString("dd")</span>
+                                </div>
+                                <ul class="list-meetings">
+                                    @foreach (ICP.SP.IntranetWeb.Models.EventInfo evInfo in Model.EventInfoList)
+                                    {
+                                        if (evInfo.StartDate.ToShortDateString() == DateTime.Today.ToShortDateString())
+                                        {
+                                            <li class="clearfix" data-toggle="tooltip" data-placement="@(Convert.ToInt32(evInfo.StartDate.DayOfWeek) == 1 ? "right" : "left")" title="@evInfo.Title">
+                                                <span class="left">@evInfo.StartDate.ToString("HH:mm")</span><span>@evInfo.Title</span>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </td>
+                            <td class="field field-calendar" )">
+                                <div>
+                                    <span class="day">@DateTime.Today.AddDays(1).ToString("dd")</span>
+                                </div>
+                                <ul class="list-meetings">
+                                    @foreach (ICP.SP.IntranetWeb.Models.EventInfo evInfo in Model.EventInfoList)
+                                    {
+                                        if (evInfo.StartDate.ToShortDateString() == DateTime.Today.AddDays(1).ToShortDateString())
+                                        {
+                                            <li class="clearfix" data-toggle="tooltip" data-placement="@(Convert.ToInt32(evInfo.StartDate.DayOfWeek) == 1 ? "right" : "left")" title="@evInfo.Title">
+                                                <span class="left">@evInfo.StartDate.ToString("HH:mm")</span><span>@evInfo.Title</span>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </td>
+                            <td class="field field-calendar" )">
+                                <div>
+                                    <span class="day">@DateTime.Today.AddDays(2).ToString("dd")</span>
+                                </div>
+                                <ul class="list-meetings">
+                                    @foreach (ICP.SP.IntranetWeb.Models.EventInfo evInfo in Model.EventInfoList)
+                                    {
+                                        if (evInfo.StartDate.ToShortDateString() == DateTime.Today.AddDays(2).ToShortDateString())
+                                        {
+                                            <li class="clearfix" data-toggle="tooltip" data-placement="@(Convert.ToInt32(evInfo.StartDate.DayOfWeek) == 1 ? "right" : "left")" title="@evInfo.Title">
+                                                <span class="left">@evInfo.StartDate.ToString("HH:mm")</span><span>@evInfo.Title</span>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,138 @@
+﻿@model ICP.SP.IntranetWeb.ViewModels.OutcomingMailboxViewModel
+@{
+    ViewBag.Title = "Correspondencia Saliente";
+}
+<link rel="Stylesheet" type="text/css" href="../content/peoplepickercontrol.css" />
+<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/4.0/1/MicrosoftAjax.js"></script>
+<script src="../Scripts/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script src="../Scripts/peoplepickercontrol.js?1" type="text/javascript"></script>
+<script src="../Scripts/ppcoutcoming_actions.js" type="text/javascript"></script>
+<script type="text/javascript">
+    // Set the style of the client web part page to be consistent with the host web.
+    (function () {
+        'use strict';
+
+        var hostUrl = '';
+        var link = document.createElement('link');
+        link.setAttribute('rel', 'stylesheet');
+        if (document.URL.indexOf('?') != -1) {
+            var params = document.URL.split('?')[1].split('&');
+            for (var i = 0; i < params.length; i++) {
+                var p = decodeURIComponent(params[i]);
+                if (/^SPHostUrl=/i.test(p)) {
+                    hostUrl = p.split('=')[1];
+                    link.setAttribute('href', hostUrl + '/_layouts/15/defaultcss.ashx');
+                    break;
+                }
+            }
+        }
+        if (hostUrl == '') {
+            link.setAttribute('href', '/_layouts/15/1033/styles/themable/corev15.css');
+        }
+        document.head.appendChild(link);
+    })();
+   
+</script>
+<style type="text/css">
+    .col-md-6 textarea {
+        max-width: 100%;
+    }
+</style>
+<div class="container">
+    <h2>Correspondencia Saliente</h2>
+    <hr />
+    <form action="@Request.Url.PathAndQuery" method="POST">
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="CompanyName">Compañía:</label>
+            <div class="col-md-4">
+                @Html.DropDownListFor(m => m.DBModel.CompanyName, ViewBag.CompanyList as IEnumerable<SelectListItem>, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="clearfix"></div><br />
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="DepartmentName">Área:</label>
+            <div class="col-md-4">
+                @Html.DropDownListFor(m => m.DBModel.DepartmentName, ViewBag.DepartmentList as IEnumerable<SelectListItem>, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="clearfix"></div><br />
+        @*<div class="form-group">
+            <label class="col-md-2 control-label" for="AssignedTo">Responsable <span class="text-danger">*</span></label>
+            <div class="col-md-6">
+                <div id="divAdministrators" class="cam-peoplepicker-userlookup form-control">
+                    <span id="spanAdministrators"></span>
+                    <input type="text" class="cam-peoplepicker-edit" id="inputAdministrators" />
+                </div>
+                <div id="divAdministratorsSearch" class="cam-peoplepicker-usersearch ms-emphasisBorder"></div>
+
+                @Html.HiddenFor(m => m.DBModel.RequestedByLogin, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="clearfix"></div><br />*@
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="DocumentTitle">Asunto</label>
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.DBModel.DocumentTitle, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="clearfix"></div><br />
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="DestinationCompany">Destinatario</label>
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.DBModel.DestinationCompany, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="clearfix"></div><br />
+        @Html.HiddenFor(m => m.DBModel.RequestDate)
+        @Html.HiddenFor(m => m.DBModel.RequestedByName)
+        @Html.HiddenFor(m => m.DBModel.SiteUrl)
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @if (string.IsNullOrEmpty(Model.ConfirmMessage))
+                {
+                    if (string.IsNullOrEmpty(Model.ErrorMessage) && string.IsNullOrEmpty(Model.WarningMessage))
+                    {
+                        if (ViewBag.CanSave != null)
+                        {
+                        <input type="submit" id="btnSubmit" class="btn btn-primary" value="Generar" />
+                        }
+                        else
+                        {
+                            <div class="alert alert-danger" role="alert">No tiene permisos para solicitar un correlativo.</div>
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(Model.WarningMessage))
+                    {
+                        <div class="alert alert-warning" role="alert">@Model.WarningMessage</div>
+                    }
+                    if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger" role="alert">@Model.ErrorMessage</div>
+                    }
+                    <input type="button" class="btn" value="Cancelar" onclick="window.close()" />
+                }
+                else
+                {
+                    <div class="alert alert-success" role="alert">Se ha generado el código <b>@Model.DBModel.DocumentCode</b>.<br/>Para continuar presione "Cerrar"</div>
+                    @Html.ActionLink("Descargar Plantilla", "DownloadOutboxFile", "OutboxDocs", new { documentId = Model.DBModel.DocumentId },null)
+                    <input type="button" class="btn" value="Cerrar" onclick="window.close()" />
+                    
+                }
+            </div>
+        </div>
+    </form>
+    <br />
+
+    <div class="clearfix"></div><br />
+    <div class="alert alert-danger" id="formValidation" role="alert" style="display:none"></div>
+    <div style="display:none">
+        <div class="col-md-6">
+            <div id="divAssignedBy" class="cam-peoplepicker-userlookup form-control">
+                <span id="spanAssignedBy"></span>
+                <input type="text" class="cam-peoplepicker-edit" id="inAssignedBy" />
+            </div>
+            <div id="divAssignedBySearch" class="cam-peoplepicker-usersearch ms-emphasisBorder"></div>
+            <input id="hdnAssignedBy" />
+        </div>
+    </div>
+</div>

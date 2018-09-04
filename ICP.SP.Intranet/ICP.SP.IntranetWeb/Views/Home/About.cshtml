@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+
+<p>Use this area to provide additional information.</p>
+@using (Html.BeginForm())
+{
+    <fieldset>
+        <div class="col-md-4">
+            <label>Fecha inicio</label>
+        </div>
+        <div class="col-md-8">
+            <input type="date" id="fecha" name="fecha" />
+            <select id="horasFI" name="horasFI">
+                <option value="01">01</option>
+                <option value="02">02</option>
+                <option value="03">03</option>
+                <option value="04">04</option>
+                <option value="05">05</option>
+                <option value="06">06</option>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>:
+            <select id="miutosFI" name="minutosFI">
+                <option value="00">00</option>
+                <option value="30">30</option>
+            </select>
+            <select id="ampm" name="ampm">
+                <option value="am">am</option>
+                <option value="pm">pm</option>
+            </select>
+        </div>
+    </fieldset>
+    <fieldset>
+        <div class="col-md-4">
+            <label>Duración</label>
+        </div>
+        <div class="col-md-8">
+            <select id="horasD" name="horasD">
+                <option value="0">00</option>
+                <option value="1">01</option>
+                <option value="2">02</option>
+                <option value="3">03</option>
+                <option value="4">04</option>
+                <option value="5">05</option>
+                <option value="6">06</option>
+                <option value="7">07</option>
+                <option value="8">08</option>
+                <option value="9">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>:
+            <select id="minutosD" name="minutosD">
+                <option value="00">00</option>
+                <option value="30" selected="selected">30</option>
+            </select>
+            <input type="checkbox" name="todoDia" /> Todo el día
+        </div>
+    </fieldset>
+    <fieldset>
+        <div class="col-md-4">
+            <label>Núm. participantes</label>
+        </div>
+        <div class="col-md-8">
+            <select id="numParticipantes" name="numParticipantes">
+                <option value="04">Hasta 4</option>
+                <option value="06">Hasta 6</option>
+                <option value="08">Hasta 8</option>
+            </select>
+        </div>
+    </fieldset>
+    <button type="submit" value="demo">Buscar sala</button>
+}
+@ViewBag.Temp
+@if (!string.IsNullOrEmpty(ViewBag.MeetingUrl))
+{
+<script type="text/javascript">
+    window.open('@Html.Raw(ViewBag.MeetingUrl)');
+</script>
+}

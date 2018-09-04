@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <CustomAction Id="f752eebd-146f-4671-a1d4-d531b5b50479.micaAssignPendingDoc"
+                RegistrationType="ContentType"
+                RegistrationId="0x01010031ACAE096B54C9419C2CB7B4702EFAF9"
+                Location="EditControlBlock"
+                Sequence="10001"
+                Title="Asignar Documento"
+                Rights="EditListItems">
+    <!-- 
+    Update the Url below to the page you want the custom action to use.
+    Start the URL with the token ~remoteAppUrl if the page is in the
+    associated web project, use ~appWebUrl if page is in the app project.
+    -->
+    <UrlAction Url="~remoteAppUrl/AssignedDocs/AssignDocument?{StandardTokens}&amp;SPListItemId={ItemId}&amp;SPListId={ListId}" />
+  </CustomAction>
+</Elements>

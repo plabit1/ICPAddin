@@ -1,0 +1,78 @@
+﻿@model ICP.SP.IntranetWeb.ViewModels.AssignedDocsViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript">
+        // Set the style of the client web part page to be consistent with the host web.
+        (function () {
+            'use strict';
+
+            var hostUrl = '';
+            var link = document.createElement('link');
+            link.setAttribute('rel', 'stylesheet');
+            if (document.URL.indexOf('?') != -1) {
+                var params = document.URL.split('?')[1].split('&');
+                for (var i = 0; i < params.length; i++) {
+                    var p = decodeURIComponent(params[i]);
+                    if (/^SPHostUrl=/i.test(p)) {
+                        hostUrl = p.split('=')[1];
+                        link.setAttribute('href', hostUrl + '/_layouts/15/defaultcss.ashx');
+                        break;
+                    }
+                }
+            }
+            if (hostUrl == '') {
+                link.setAttribute('href', '/_layouts/15/1033/styles/themable/corev15.css');
+            }
+            document.head.appendChild(link);
+        })();
+    </script>
+    <link type="text/css" href="~/Content/Site.css" rel="stylesheet"/>
+</head>
+<body>
+    @if (Model.Message != null)
+    {
+        <p class="has-error">@Html.Raw(Model.Message)</p>
+    }
+    else
+    {
+        if (Model.PendDocsInfoList.Count > 0)
+        {
+            <div id="divContainer">
+                <table id="gv_planner" cellspacing="0" cellpadding="4" rules="cols" border="1" style="color:#333333;width:100%;border-collapse:collapse;">
+                    <thead>
+                        <tr style="color:White;background-color:#507CD1;font-weight:bold;">
+                            <th>Documento</th>
+                            <th style="width:75px">Fecha</th>
+                            <th style="width:75px">Estado</th>
+                            <th style="width:35px"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < Model.PendDocsInfoList.Count; i++)
+                    {
+                            <tr style="color:#333333;background-color:#EFF3FB;border-bottom:solid 1px #cecece">
+                                <td><a href="@Model.PendDocsInfoList[i].DocumentUrl" target="_blank">@Model.PendDocsInfoList[i].DocumentTitle</a></td>
+                                <td style="text-align:center">@Html.Raw(Model.PendDocsInfoList[i].DueToDate.ToString("d", Model.CurrentCulture))</td>
+                                <td style="text-align:center">@Html.ActionLink(@Model.PendDocsInfoList[i].AssignmentStatus, "AssignDocument", "AssignedDocs", new { SPHostUrl = ViewBag.WebUrl, SPAppWebUrl = ViewBag.AppUrl, SPListId = Model.PendDocsInfoList[i].DocumentLibraryId, SPListItemId = Model.PendDocsInfoList[i].ListItemId, SPLanguage = Model.CurrentCulture }, new { target = "_blank" })</td>
+                                <td style="text-align:center"><img src="~/Content/img/@string.Format("{0}.png",Model.PendDocsInfoList[i].Indicator)" alt="Status" /></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <h3>No tiene documentos asignados pendientes</h3>
+        }
+
+    }
+</body>
+</html>

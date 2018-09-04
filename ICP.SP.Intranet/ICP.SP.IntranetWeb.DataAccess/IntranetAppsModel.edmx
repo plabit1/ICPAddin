@@ -1,0 +1,286 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="IntranetAppsDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DocumentAssignment">
+          <Key>
+            <PropertyRef Name="DocumentAssignmentId" />
+          </Key>
+          <Property Name="DocumentAssignmentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SiteUrl" Type="nvarchar(max)" />
+          <Property Name="DocumentLibraryId" Type="nvarchar" MaxLength="30" />
+          <Property Name="ListItemId" Type="int" />
+          <Property Name="DocumentUrl" Type="nvarchar(max)" />
+          <Property Name="DocumentTitle" Type="nvarchar(max)" />
+          <Property Name="AssignedByLogin" Type="nvarchar" MaxLength="50" />
+          <Property Name="AssignedByName" Type="nvarchar" MaxLength="100" />
+          <Property Name="AssignmentDate" Type="datetime" />
+          <Property Name="AssignmentStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="AssignedToLogin" Type="nvarchar" MaxLength="50" />
+          <Property Name="AssignedToName" Type="nvarchar" MaxLength="100" />
+          <Property Name="AssignedToControl" Type="nvarchar" MaxLength="200" />
+          <Property Name="DueToDate" Type="datetime" />
+          <Property Name="FirstReminderDays" Type="int" />
+          <Property Name="SecondReminderDays" Type="int" />
+        </EntityType>
+        <EntityType Name="IncomingMailbox">
+          <Key>
+            <PropertyRef Name="IncomingMailboxId" />
+          </Key>
+          <Property Name="IncomingMailboxId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SiteUrl" Type="nvarchar(max)" />
+          <Property Name="DocumentLibraryId" Type="nvarchar" MaxLength="30" />
+          <Property Name="ListItemId" Type="int" />
+          <Property Name="DocumentUrl" Type="nvarchar(max)" />
+          <Property Name="DocumentTitle" Type="nvarchar(max)" />
+          <Property Name="DocumentDate" Type="datetime" />
+          <Property Name="AssignedByLogin" Type="nvarchar" MaxLength="50" />
+          <Property Name="AssignedByName" Type="nvarchar" MaxLength="100" />
+          <Property Name="AssignmentDate" Type="datetime" />
+          <Property Name="AssignmentStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="AssignedToLogin" Type="nvarchar" MaxLength="50" />
+          <Property Name="AssignedToName" Type="nvarchar" MaxLength="100" />
+          <Property Name="AssignedToControl" Type="nvarchar" MaxLength="200" />
+          <Property Name="AssignedToCCLogin" Type="nvarchar(max)" />
+          <Property Name="AssignedToCCName" Type="nvarchar(max)" />
+          <Property Name="AssignedToCCControl" Type="nvarchar(max)" />
+          <Property Name="DocumentSubject" Type="nvarchar" MaxLength="200" />
+          <Property Name="DocumentSummary" Type="nvarchar(max)" />
+          <Property Name="DocumentFrom" Type="nvarchar" MaxLength="200" />
+          <Property Name="DocumentAnnotation" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="IncomingMailboxDetail">
+          <Key>
+            <PropertyRef Name="IncomingMailboxId" />
+            <PropertyRef Name="IncomingMailboxDetailId" />
+          </Key>
+          <Property Name="IncomingMailboxId" Type="int" Nullable="false" />
+          <Property Name="IncomingMailboxDetailId" Type="int" Nullable="false" />
+          <Property Name="AssignedByLogin" Type="nvarchar" MaxLength="50" />
+          <Property Name="AssignedByName" Type="nvarchar" MaxLength="100" />
+          <Property Name="AssignmentDate" Type="datetime" />
+          <Property Name="AssignmentStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="AssignedToLogin" Type="nvarchar" MaxLength="50" />
+          <Property Name="AssignedToName" Type="nvarchar" MaxLength="100" />
+          <Property Name="AssignedToControl" Type="nvarchar" MaxLength="200" />
+          <Property Name="AssignedToCCLogin" Type="nvarchar(max)" />
+          <Property Name="AssignedToCCName" Type="nvarchar(max)" />
+          <Property Name="AssignedToCCControl" Type="nvarchar(max)" />
+          <Property Name="DocumentAnnotation" Type="nvarchar(max)" />
+        </EntityType>
+        <Association Name="FK_IncomingMailboxDetail_IncomingMailbox">
+          <End Role="IncomingMailbox" Type="Self.IncomingMailbox" Multiplicity="1" />
+          <End Role="IncomingMailboxDetail" Type="Self.IncomingMailboxDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IncomingMailbox">
+              <PropertyRef Name="IncomingMailboxId" />
+            </Principal>
+            <Dependent Role="IncomingMailboxDetail">
+              <PropertyRef Name="IncomingMailboxId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="IntranetAppsDbModelStoreContainer">
+          <EntitySet Name="DocumentAssignment" EntityType="Self.DocumentAssignment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IncomingMailbox" EntityType="Self.IncomingMailbox" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IncomingMailboxDetail" EntityType="Self.IncomingMailboxDetail" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_IncomingMailboxDetail_IncomingMailbox" Association="Self.FK_IncomingMailboxDetail_IncomingMailbox">
+            <End Role="IncomingMailbox" EntitySet="IncomingMailbox" />
+            <End Role="IncomingMailboxDetail" EntitySet="IncomingMailboxDetail" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IntranetAppsDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="DocumentAssignment">
+          <Key>
+            <PropertyRef Name="DocumentAssignmentId" />
+          </Key>
+          <Property Name="DocumentAssignmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SiteUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentLibraryId" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ListItemId" Type="Int32" />
+          <Property Name="DocumentUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedByLogin" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedByName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AssignmentDate" Type="DateTime" Precision="3" />
+          <Property Name="AssignmentStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedToLogin" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedToName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedToControl" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DueToDate" Type="DateTime" Precision="3" />
+          <Property Name="FirstReminderDays" Type="Int32" />
+          <Property Name="SecondReminderDays" Type="Int32" />
+        </EntityType>
+        <EntityType Name="IncomingMailbox">
+          <Key>
+            <PropertyRef Name="IncomingMailboxId" />
+          </Key>
+          <Property Name="IncomingMailboxId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SiteUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentLibraryId" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ListItemId" Type="Int32" />
+          <Property Name="DocumentUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentDate" Type="DateTime" Precision="3" />
+          <Property Name="AssignedByLogin" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedByName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AssignmentDate" Type="DateTime" Precision="3" />
+          <Property Name="AssignmentStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedToLogin" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedToName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedToControl" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedToCCLogin" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedToCCName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedToCCControl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentSubject" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentSummary" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentFrom" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentAnnotation" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="IncomingMailboxDetail" Relationship="Self.FK_IncomingMailboxDetail_IncomingMailbox" FromRole="IncomingMailbox" ToRole="IncomingMailboxDetail" />
+        </EntityType>
+        <EntityType Name="IncomingMailboxDetail">
+          <Key>
+            <PropertyRef Name="IncomingMailboxId" />
+            <PropertyRef Name="IncomingMailboxDetailId" />
+          </Key>
+          <Property Name="IncomingMailboxId" Type="Int32" Nullable="false" />
+          <Property Name="IncomingMailboxDetailId" Type="Int32" Nullable="false" />
+          <Property Name="AssignedByLogin" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedByName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AssignmentDate" Type="DateTime" Precision="3" />
+          <Property Name="AssignmentStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedToLogin" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedToName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedToControl" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedToCCLogin" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedToCCName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AssignedToCCControl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentAnnotation" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="IncomingMailbox" Relationship="Self.FK_IncomingMailboxDetail_IncomingMailbox" FromRole="IncomingMailboxDetail" ToRole="IncomingMailbox" />
+        </EntityType>
+        <Association Name="FK_IncomingMailboxDetail_IncomingMailbox">
+          <End Role="IncomingMailbox" Type="Self.IncomingMailbox" Multiplicity="1" />
+          <End Role="IncomingMailboxDetail" Type="Self.IncomingMailboxDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IncomingMailbox">
+              <PropertyRef Name="IncomingMailboxId" />
+            </Principal>
+            <Dependent Role="IncomingMailboxDetail">
+              <PropertyRef Name="IncomingMailboxId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="IntranetAppsDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DocumentAssignment" EntityType="Self.DocumentAssignment" />
+          <EntitySet Name="IncomingMailbox" EntityType="Self.IncomingMailbox" />
+          <EntitySet Name="IncomingMailboxDetail" EntityType="Self.IncomingMailboxDetail" />
+          <AssociationSet Name="FK_IncomingMailboxDetail_IncomingMailbox" Association="Self.FK_IncomingMailboxDetail_IncomingMailbox">
+            <End Role="IncomingMailbox" EntitySet="IncomingMailbox" />
+            <End Role="IncomingMailboxDetail" EntitySet="IncomingMailboxDetail" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="IntranetAppsDbModelStoreContainer" CdmEntityContainer="IntranetAppsDbEntities">
+          <EntitySetMapping Name="DocumentAssignment">
+            <EntityTypeMapping TypeName="IntranetAppsDbModel.DocumentAssignment">
+              <MappingFragment StoreEntitySet="DocumentAssignment">
+                <ScalarProperty Name="DocumentAssignmentId" ColumnName="DocumentAssignmentId" />
+                <ScalarProperty Name="SiteUrl" ColumnName="SiteUrl" />
+                <ScalarProperty Name="DocumentLibraryId" ColumnName="DocumentLibraryId" />
+                <ScalarProperty Name="ListItemId" ColumnName="ListItemId" />
+                <ScalarProperty Name="DocumentUrl" ColumnName="DocumentUrl" />
+                <ScalarProperty Name="DocumentTitle" ColumnName="DocumentTitle" />
+                <ScalarProperty Name="AssignedByLogin" ColumnName="AssignedByLogin" />
+                <ScalarProperty Name="AssignedByName" ColumnName="AssignedByName" />
+                <ScalarProperty Name="AssignmentDate" ColumnName="AssignmentDate" />
+                <ScalarProperty Name="AssignmentStatus" ColumnName="AssignmentStatus" />
+                <ScalarProperty Name="AssignedToLogin" ColumnName="AssignedToLogin" />
+                <ScalarProperty Name="AssignedToName" ColumnName="AssignedToName" />
+                <ScalarProperty Name="AssignedToControl" ColumnName="AssignedToControl" />
+                <ScalarProperty Name="DueToDate" ColumnName="DueToDate" />
+                <ScalarProperty Name="FirstReminderDays" ColumnName="FirstReminderDays" />
+                <ScalarProperty Name="SecondReminderDays" ColumnName="SecondReminderDays" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IncomingMailbox">
+            <EntityTypeMapping TypeName="IntranetAppsDbModel.IncomingMailbox">
+              <MappingFragment StoreEntitySet="IncomingMailbox">
+                <ScalarProperty Name="IncomingMailboxId" ColumnName="IncomingMailboxId" />
+                <ScalarProperty Name="SiteUrl" ColumnName="SiteUrl" />
+                <ScalarProperty Name="DocumentLibraryId" ColumnName="DocumentLibraryId" />
+                <ScalarProperty Name="ListItemId" ColumnName="ListItemId" />
+                <ScalarProperty Name="DocumentUrl" ColumnName="DocumentUrl" />
+                <ScalarProperty Name="DocumentTitle" ColumnName="DocumentTitle" />
+                <ScalarProperty Name="DocumentDate" ColumnName="DocumentDate" />
+                <ScalarProperty Name="AssignedByLogin" ColumnName="AssignedByLogin" />
+                <ScalarProperty Name="AssignedByName" ColumnName="AssignedByName" />
+                <ScalarProperty Name="AssignmentDate" ColumnName="AssignmentDate" />
+                <ScalarProperty Name="AssignmentStatus" ColumnName="AssignmentStatus" />
+                <ScalarProperty Name="AssignedToLogin" ColumnName="AssignedToLogin" />
+                <ScalarProperty Name="AssignedToName" ColumnName="AssignedToName" />
+                <ScalarProperty Name="AssignedToControl" ColumnName="AssignedToControl" />
+                <ScalarProperty Name="AssignedToCCLogin" ColumnName="AssignedToCCLogin" />
+                <ScalarProperty Name="AssignedToCCName" ColumnName="AssignedToCCName" />
+                <ScalarProperty Name="AssignedToCCControl" ColumnName="AssignedToCCControl" />
+                <ScalarProperty Name="DocumentSubject" ColumnName="DocumentSubject" />
+                <ScalarProperty Name="DocumentSummary" ColumnName="DocumentSummary" />
+                <ScalarProperty Name="DocumentFrom" ColumnName="DocumentFrom" />
+                <ScalarProperty Name="DocumentAnnotation" ColumnName="DocumentAnnotation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IncomingMailboxDetail">
+            <EntityTypeMapping TypeName="IntranetAppsDbModel.IncomingMailboxDetail">
+              <MappingFragment StoreEntitySet="IncomingMailboxDetail">
+                <ScalarProperty Name="IncomingMailboxId" ColumnName="IncomingMailboxId" />
+                <ScalarProperty Name="IncomingMailboxDetailId" ColumnName="IncomingMailboxDetailId" />
+                <ScalarProperty Name="AssignedByLogin" ColumnName="AssignedByLogin" />
+                <ScalarProperty Name="AssignedByName" ColumnName="AssignedByName" />
+                <ScalarProperty Name="AssignmentDate" ColumnName="AssignmentDate" />
+                <ScalarProperty Name="AssignmentStatus" ColumnName="AssignmentStatus" />
+                <ScalarProperty Name="AssignedToLogin" ColumnName="AssignedToLogin" />
+                <ScalarProperty Name="AssignedToName" ColumnName="AssignedToName" />
+                <ScalarProperty Name="AssignedToControl" ColumnName="AssignedToControl" />
+                <ScalarProperty Name="AssignedToCCLogin" ColumnName="AssignedToCCLogin" />
+                <ScalarProperty Name="AssignedToCCName" ColumnName="AssignedToCCName" />
+                <ScalarProperty Name="AssignedToCCControl" ColumnName="AssignedToCCControl" />
+                <ScalarProperty Name="DocumentAnnotation" ColumnName="DocumentAnnotation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

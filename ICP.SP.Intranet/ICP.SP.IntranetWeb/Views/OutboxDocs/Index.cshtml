@@ -1,0 +1,126 @@
+﻿@model ICP.SP.IntranetWeb.ViewModels.OutboxDocsViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript">
+        // Set the style of the client web part page to be consistent with the host web.
+        (function () {
+            'use strict';
+
+            var hostUrl = '';
+            var link = document.createElement('link');
+            link.setAttribute('rel', 'stylesheet');
+            if (document.URL.indexOf('?') != -1) {
+                var params = document.URL.split('?')[1].split('&');
+                for (var i = 0; i < params.length; i++) {
+                    var p = decodeURIComponent(params[i]);
+                    if (/^SPHostUrl=/i.test(p)) {
+                        hostUrl = p.split('=')[1];
+                        link.setAttribute('href', hostUrl + '/_layouts/15/defaultcss.ashx');
+                        break;
+                    }
+                }
+            }
+            if (hostUrl == '') {
+                link.setAttribute('href', '/_layouts/15/1033/styles/themable/corev15.css');
+            }
+            document.head.appendChild(link);
+        })();
+    </script>
+    <link type="text/css" href="~/Content/Site.css" rel="stylesheet" />
+</head>
+<body>
+    
+    @using (Html.BeginForm())
+    {
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="SearchText">Buscar</label>
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.SearchFilter.SearchText, new { @class = "form-control" })
+            </div>
+            <div class="col-md-4">
+                <input type="submit" value="Buscar" class="btn btn-default" />
+                @Html.ActionLink("Nuevo", "GenerateCode", new { SPHostUrl = ViewBag.WebUrl, SPAppWebUrl = ViewBag.AppUrl }, new { target = "_blank", @class = "btn btn-default" })
+            </div>
+        </div>
+        <div class="clearfix"></div><br />
+        <div class="form-group" style="display:none">
+            <label class="col-md-2 control-label" for="SearchDateFrom">De</label>
+            <div class="col-md-3">
+                @Html.TextBoxFor(m => m.SearchFilter.SearchDateFrom, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date" })
+            </div>
+            <label class="col-md-2 control-label" for="DocumentTitle">A</label>
+            <div class="col-md-3">
+                @Html.TextBoxFor(m => m.SearchFilter.SearchDateTo, "{0:yyyy-MM-dd}", new { @class = "form-control", @type = "date" })
+            </div>
+        </div>
+        <div class="clearfix"></div><br />
+    }
+    @if (Model.Message != null)
+    {
+        <p class="has-error">@Html.Raw(Model.Message)</p>
+    }
+    else
+    {
+        if (Model.MailboxDocumentList.Count > 0)
+        {
+                <table id="gv_planner" cellspacing="0" cellpadding="4" rules="cols" border="1" style="color:#333333;width:100%;border-collapse:collapse;">
+                    <thead>
+                        <tr style="color:White;background-color:#507CD1;font-weight:bold;">
+                            <th style="width:75px">Código</th>
+                            <th>Documento</th>
+                            <th>Remitente</th>
+                            <th>Destinatario</th>
+                            <th style="width:75px">Generado el</th>
+                            <th style="width:75px">Enviado el</th>
+                            <th style="width:75px">Recibido el</th>
+                            <th style="width:75px">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < Model.MailboxDocumentList.Count; i++)
+                        {
+                            <tr style="color:#333333;background-color:#EFF3FB;border-bottom:solid 1px #cecece">
+                                <td>@Model.MailboxDocumentList[i].DocumentCode</td>
+                                <td>@Model.MailboxDocumentList[i].DocumentTitle</td>
+                                <td>@Model.MailboxDocumentList[i].RequestedByName</td>
+                                <td>@Model.MailboxDocumentList[i].DestinationCompany</td>
+                                <td>@Model.MailboxDocumentList[i].RequestDate.ToString("d", Model.CurrentCulture)</td>
+                                <td style="text-align:center">
+                                    @if (Model.MailboxDocumentList[i].SentDate > new DateTime(1900, 1, 1))
+                                    {
+                                        <a href="@Model.MailboxDocumentList[i].DocumentFilename " target="_blank">
+                                            @Html.Raw(Model.MailboxDocumentList[i].SentDate.ToString("d", Model.CurrentCulture))
+                                        </a>
+                                    }
+                                </td>
+                                <td>
+                                   @if (Model.MailboxDocumentList[i].DeliveryDate > new DateTime(1900, 1, 1))
+                                   {
+                                    <a href="@Model.MailboxDocumentList[i].ReceiptFilename" target="_blank">
+                                        @Html.Raw(Model.MailboxDocumentList[i].DeliveryDate.ToString("d", Model.CurrentCulture))
+                                    </a>
+                                   }
+                                </td>
+                                <td style="text-align:center">
+                                    <img src="~/Content/img/@string.Format("{0}.png", Model.MailboxDocumentList[i].Indicator)" alt="Status" />
+                                    @Html.ActionLink("Detalle", "ViewOutDoc", "OutboxDocs", new { documentId = Model.MailboxDocumentList[i].DocumentId, SPHostUrl = ViewBag.WebUrl, SPAppWebUrl = ViewBag.AppUrl, SPLanguage = Model.CurrentCulture }, new { target = "_blank" })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <br/>
+                <h4>** Se presentan los últimos 50 registros</h4>
+        }
+        else
+        {
+            <h3> No tiene correspondencia entrante asignada</h3>
+        }
+    }
+</body>
+</html>

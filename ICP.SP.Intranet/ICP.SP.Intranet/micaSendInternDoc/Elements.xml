@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <CustomAction Id="10b4c607-fc03-4b49-9546-74f083428fed.micaSendInternDoc"
+                RegistrationType="ContentType"
+                RegistrationId="0x010100727C9AD6620A334CA76FA338405C2D11"
+                Location="EditControlBlock"
+                Sequence="10001"
+                Title="Correspondencia Entrante"
+                Rights="EditListItems">
+    <!-- 
+    Update the Url below to the page you want the custom action to use.
+    Start the URL with the token ~remoteAppUrl if the page is in the
+    associated web project, use ~appWebUrl if page is in the app project.
+    -->
+    <UrlAction Url="~remoteAppUrl/InboxDocs/AssignIncoming?{StandardTokens}&amp;SPListItemId={ItemId}&amp;SPListId={ListId}" />
+  </CustomAction>
+</Elements>

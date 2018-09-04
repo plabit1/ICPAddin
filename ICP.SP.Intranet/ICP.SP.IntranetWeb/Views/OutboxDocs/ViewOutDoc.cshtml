@@ -1,0 +1,185 @@
+﻿@model ICP.SP.IntranetWeb.ViewModels.OutcomingMailboxViewModel
+@{
+    ViewBag.Title = "View Outcoming Document";
+}
+
+
+
+
+
+<script type="text/javascript">
+    // Set the style of the client web part page to be consistent with the host web.
+    (function () {
+        'use strict';
+
+        var hostUrl = '';
+        var link = document.createElement('link');
+        link.setAttribute('rel', 'stylesheet');
+        if (document.URL.indexOf('?') != -1) {
+            var params = document.URL.split('?')[1].split('&');
+            for (var i = 0; i < params.length; i++) {
+                var p = decodeURIComponent(params[i]);
+                if (/^SPHostUrl=/i.test(p)) {
+                    hostUrl = p.split('=')[1];
+                    link.setAttribute('href', hostUrl + '/_layouts/15/defaultcss.ashx');
+                    break;
+                }
+            }
+        }
+        if (hostUrl == '') {
+            link.setAttribute('href', '/_layouts/15/1033/styles/themable/corev15.css');
+        }
+        document.head.appendChild(link);
+    })();
+
+</script>
+<style type="text/css">
+    .col-md-6 textarea {
+        max-width: 100%;
+    }
+</style>
+<div class="container">
+    <h2>Correspondencia Saliente</h2>
+    <hr />
+    <form action="@Request.Url.PathAndQuery" method="POST" enctype="multipart/form-data">
+        
+        <div class="form-group">
+
+            <label class="col-md-2 control-label" for="CompanyName">Compañía:</label>
+            <div class="col-md-4">
+                @Html.DisplayFor(m => m.DBModel.CompanyName)
+            </div>
+            <label class="col-md-2 control-label" for="DepartmentName">Área:</label>
+            <div class="col-md-4">
+                @Html.DisplayFor(m => m.DBModel.DepartmentName)
+            </div>
+        </div>
+        <div class="clearfix"></div><br />
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="DocumentTitle">Solicitante</label>
+            <div class="col-md-4">
+                @Html.DisplayFor(m => m.DBModel.RequestedByName)
+            </div>
+            <label class="col-md-2 control-label" for="DocumentCode">Código</label>
+            <div class="col-md-4">
+                @Html.DisplayFor(m => m.DBModel.DocumentCode)
+            </div>
+        </div>
+        <div class="clearfix"></div><br />
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="DocumentTitle">Asunto</label>
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.DBModel.DocumentTitle, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="clearfix"></div><br />
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="DestinationCompany">Destinatario</label>
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.DBModel.DestinationCompany, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="clearfix"></div><br />
+        @if (Model.DBModel.RequestStatus != "Recibido")
+        {
+        <div class="form-group">
+
+            <label class="col-md-2 control-label" for="adjunto">Adjunto:</label>
+            <div class="col-md-8">
+                @Html.TextBoxFor(m => m.TempFile, new { type = "file" })
+            </div>
+        </div>
+        <div class="clearfix"></div><br />
+        }
+        @if (Model.DBModel.SentDate > new DateTime(1900, 1, 1))
+        {
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="SentDate">Fecha enviado:</label>
+                <div class="col-md-4">
+                    @Model.DBModel.SentDate.ToString("dd/MM/yyyy")
+                </div>
+                @if (!string.IsNullOrEmpty(Model.DBModel.DocumentFilename))
+                {
+                    <div class="col-md-4">
+                        <a href="@Model.DBModel.DocumentFilename" target="_blank">Ver documento</a>
+                    </div>
+                }
+            </div>
+            <div class="clearfix"></div><br />
+        }
+        @if (Model.DBModel.DeliveryDate > new DateTime(1900, 1, 1))
+        {
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="DeliveryDate">Fecha recibido:</label>
+                <div class="col-md-4">
+                    @Model.DBModel.DeliveryDate.ToString("dd/MM/yyyy")
+                </div>
+                @if (!string.IsNullOrEmpty(Model.DBModel.ReceiptFilename))
+                {
+                    <div class="col-md-4">
+                        <a href="@Model.DBModel.ReceiptFilename" target="_blank">Ver documento</a>
+                    </div>
+                }
+            </div>
+            <div class="clearfix"></div><br />
+        }
+        @Html.HiddenFor(m => m.DBModel.RequestedByName)
+        @Html.HiddenFor(m => m.DBModel.SiteUrl)
+        @Html.HiddenFor(m => m.PreviousPage)
+        @Html.HiddenFor(m => m.Operation)
+        @Html.HiddenFor(m => m.DBModel.RequestStatus)
+        @Html.HiddenFor(m => m.DBModel.DocumentId)
+        @Html.HiddenFor(m => m.DBModel.DocumentFolder)
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @if (string.IsNullOrEmpty(Model.ConfirmMessage))
+                {
+                    if (string.IsNullOrEmpty(Model.ErrorMessage) && string.IsNullOrEmpty(Model.WarningMessage))
+                    {
+                        if (ViewBag.CanSave != null)
+                        {
+                        <input type="submit" class="btn btn-default btn-primary" value="Actualizar" />
+                        }
+                        else
+                        {
+                            <div class="alert alert-danger" role="alert">No tiene permisos para editar este documento.</div>
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(Model.WarningMessage))
+                    {
+                        <div class="alert alert-warning" role="alert">@Model.WarningMessage</div>
+                    }
+                    if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger" role="alert">@Model.ErrorMessage</div>
+                    }
+                    <input type="button" class="btn" value="Cancelar" onclick="window.close()" />
+                }
+                else
+                {
+                    <div class="alert alert-success" role="alert">@Model.ConfirmMessage</div>
+                    <script type="text/javascript">
+                            window.setTimeout(function () {
+                                window.close();
+                            }, 3500);
+                    </script>
+                }
+            </div>
+        </div>
+    </form>
+    
+    <br />
+
+    <div class="clearfix"></div><br />
+    <div class="alert alert-danger" id="formValidation" role="alert" style="display:none"></div>
+    <div style="display:none">
+        <div class="col-md-6">
+            <div id="divRequestedBy" class="cam-peoplepicker-userlookup form-control">
+                <span id="spanAssignedBy"></span>
+                <input type="text" class="cam-peoplepicker-edit" id="inRequestedBy" />
+            </div>
+            <div id="divRequestedBySearch" class="cam-peoplepicker-usersearch ms-emphasisBorder"></div>
+            @Html.HiddenFor(m => m.DBModel.RequestedByLogin)
+        </div>
+    </div>
+</div>
